@@ -1,5 +1,6 @@
 package repository;
 
+import model.AudioBook;
 import model.Book;
 import model.builder.BookBuilder;
 
@@ -128,7 +129,17 @@ public class BookRepositoryMySQL implements BookRepository{
 
 
     private Book getBookFromResultSet(ResultSet resultSet) throws SQLException {
-        return new BookBuilder()
+        return new BookBuilder() {
+            @Override
+            protected AudioBook createInstance() {
+                return null;
+            }
+
+            @Override
+            protected Book createBookInstance() {
+                return null;
+            }
+        }
                 .setId(resultSet.getLong("id"))
                 .setAuthor(resultSet.getString("author"))
                 .setTitle(resultSet.getString("title"))
