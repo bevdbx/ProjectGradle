@@ -15,7 +15,6 @@ public abstract class BookBuilder<B extends BookBuilder<B, T>, T extends Book> {
             }
     }
 
-
     protected abstract AudioBook createInstance();
 
     protected abstract T createBookInstance();
