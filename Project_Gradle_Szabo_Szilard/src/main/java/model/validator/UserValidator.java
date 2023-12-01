@@ -56,14 +56,6 @@ public class UserValidator {
         return specialCharactersMatcher.find();
     }
 
-    /*
-    private void validateEmail(String email) {
-        if (!email.matches(EMAIL_VALIDATION_REGEX)) {
-            errors.add("Email is not valid");
-        }
-    }
-     */
-
     private boolean containsDigit(String password) {
         return Pattern.compile(".*[0-9].*").matcher(password).find();
     }
