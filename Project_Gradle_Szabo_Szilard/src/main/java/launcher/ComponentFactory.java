@@ -24,11 +24,15 @@ public class ComponentFactory {
     private final RightsRolesRepository rightsRolesRepository;
     private final BookRepositoryMySQL bookRepository;
     private final BookService bookService;
-    private static ComponentFactory instance;
+    private static volatile ComponentFactory instance;
 
     public static ComponentFactory getInstance(Boolean componentsForTests, Stage stage) {
         if(instance == null) {
-            instance = new ComponentFactory(componentsForTests, stage);
+            synchronized (ComponentFactory.class){
+                if(instance == null){
+                    instance = new ComponentFactory(componentsForTests, stage);
+                }
+            }
         }
 
         return instance;
