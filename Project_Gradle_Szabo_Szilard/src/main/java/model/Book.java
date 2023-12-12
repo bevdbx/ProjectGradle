@@ -16,6 +16,8 @@ public class Book {
 
     private LocalDate publishedDate;
 
+    private Integer quantity;
+
     public Long getId() {
         return id;
     }
@@ -48,8 +50,16 @@ public class Book {
         this.publishedDate = publishedDate;
     }
 
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
     @Override
     public String toString(){
-        return String.format("Book ID: %d | Author: %s | Title: %s | Published Date: %s", id, author, title, publishedDate);
+        return String.format("Book ID: %d | Author: %s | Title: %s | Published Date: %s | Quantity: %d", id, author, title, publishedDate, quantity);
     }
 }

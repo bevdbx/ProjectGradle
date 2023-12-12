@@ -26,46 +26,36 @@ public class UserValidator {
     }
 
     private void validateUsername(String username) {
-        if(!Pattern.compile(EMAIL_VALIDATION_REGEX).matcher(username).matches()) {
+        if (!Pattern.compile(EMAIL_VALIDATION_REGEX).matcher(username).matches()) {
             errors.add("Email is not valid!");
         }
     }
 
     private void validatePassword(String password) {
-        if(password.length() < MIN_PASSWORD_LENGTH ) {
-            errors.add(String.format("Password must be at least %d characters long!",MIN_PASSWORD_LENGTH));
+        if (password.length() < MIN_PASSWORD_LENGTH) {
+            errors.add(String.format("Password must be at least %d characters long!", MIN_PASSWORD_LENGTH));
         }
 
-        if(!containsSpecialCharacter(password)) {
+        if (!containsSpecialCharacter(password)) {
             errors.add("Password must contain at least one special character!");
         }
 
-        if(!containsDigit(password)) {
+        if (!containsDigit(password)) {
             errors.add("Password must contain at least one digit!");
         }
     }
 
     private boolean containsSpecialCharacter(String password) {
-        if(password == null || password.trim().isEmpty()) {
+        if (password == null || password.trim().isEmpty()) {
             return false;
         }
-        //Black list
         Pattern specialCharactersPattern = Pattern.compile("[^A-Za-z0-9]");
         Matcher specialCharactersMatcher = specialCharactersPattern.matcher(password);
-
         return specialCharactersMatcher.find();
     }
 
-    /*
-    private void validateEmail(String email) {
-        if (!email.matches(EMAIL_VALIDATION_REGEX)) {
-            errors.add("Email is not valid");
-        }
-    }
-     */
-
     private boolean containsDigit(String password) {
-        return Pattern.compile(".*[0-9].*").matcher(password).find();
+        return Pattern.compile(".[0-9].").matcher(password).find();
     }
 
     public List<String> getErrors() {

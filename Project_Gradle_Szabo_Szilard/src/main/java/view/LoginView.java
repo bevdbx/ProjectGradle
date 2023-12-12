@@ -66,6 +66,7 @@ public class LoginView {
         gridPane.add(password, 0, 2);
 
         passwordField = new PasswordField();
+        passwordField.setText("parola1234!");
         gridPane.add(passwordField, 1, 2);
 
         signInButton = new Button("Sign In");

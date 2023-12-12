@@ -16,6 +16,7 @@ public class SQLTableCreationFactory {
                     "  author varchar(500) NOT NULL," +
                     "  title varchar(500) NOT NULL," +
                     "  publishedDate datetime DEFAULT NULL," +
+                    "  quantity INT NOT NULL," +
                     "  PRIMARY KEY (id)," +
                     "  UNIQUE KEY id_UNIQUE (id)" +
                     ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;";
@@ -23,6 +24,7 @@ public class SQLTableCreationFactory {
                     "  id INT NOT NULL AUTO_INCREMENT," +
                     "  username VARCHAR(200) NOT NULL," +
                     "  password VARCHAR(64) NOT NULL," +
+                    "  salt VARCHAR(64) NOT NULL," +
                     "  PRIMARY KEY (id)," +
                     "  UNIQUE INDEX id_UNIQUE (id ASC)," +
                     "  UNIQUE INDEX username_UNIQUE (username ASC));";

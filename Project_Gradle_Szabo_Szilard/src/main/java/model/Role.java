@@ -7,6 +7,10 @@ public class Role {
     private String role;
     private List<Right> rights;
 
+    public Role(String role) {
+        this.role = role;
+    }
+
     public Role(Long id, String role, List<Right> rights) {
         this.id = id;
         this.role = role;
@@ -35,5 +39,14 @@ public class Role {
 
     public void setRights(List<Right> rights) {
         this.rights = rights;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", role='" + role + '\'' +
+                ", rights=" + rights +
+                '}';
     }
 }

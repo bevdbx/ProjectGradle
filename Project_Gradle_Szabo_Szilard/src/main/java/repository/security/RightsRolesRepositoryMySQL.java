@@ -110,6 +110,7 @@ public class RightsRolesRepositoryMySQL implements RightsRolesRepository {
                 insertUserRoleStatement.setLong(1, user.getId());
                 insertUserRoleStatement.setLong(2, role.getId());
                 insertUserRoleStatement.executeUpdate();
+                System.out.println(user);
             }
         } catch (SQLException e) {
 

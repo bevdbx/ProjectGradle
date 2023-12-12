@@ -28,7 +28,7 @@ public class Notification<T> {
         if(hasError()) {
             throw new ResultFetchException(errors);
         }
-        return result;
+        return this.result;
     }
 
     public String getFormattedErrors() {

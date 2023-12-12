@@ -13,4 +13,8 @@ public interface BookService {
     boolean save(Book book);
 
     int getAgeOfBook(Long id);
+
+    void updateBook(Book book);
+
+    void deleteBook(Long id);
 }
