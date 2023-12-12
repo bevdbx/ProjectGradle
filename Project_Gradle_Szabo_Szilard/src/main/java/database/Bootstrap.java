@@ -1,11 +1,16 @@
 package database;
 
+import model.Book;
+import model.builder.BookBuilder;
+import repository.book.BookRepository;
+import repository.book.BookRepositoryMySQL;
 import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -15,18 +20,26 @@ import static database.Constants.Roles.ROLES;
 import static database.Constants.Schemas.SCHEMAS;
 import static database.Constants.getRolesRights;
 
-// Script - code that automates some steps or processes
-
 public class Bootstrap {
 
     private static RightsRolesRepository rightsRolesRepository;
 
     public static void main(String[] args) throws SQLException {
-        dropAll();
+        //dropAll();
 
-        bootstrapTables();
+        //bootstrapTables();
 
-        bootstrapUserData();
+        //bootstrapUserData();
+
+        BookRepository bookRepository = new BookRepositoryMySQL(DatabaseConnectionFactory.getConnectionWrapper(false).getConnection());
+        Book book = new BookBuilder()
+                .setAuthor("Petre Ispirescu")
+                .setTitle("Aleodor Imparat")
+                .setPublishedDate(LocalDate.of(1900, 10, 14))
+                .setQuantity(5)
+                .build();
+
+        bookRepository.save(book);
     }
 
     private static void dropAll() throws SQLException {

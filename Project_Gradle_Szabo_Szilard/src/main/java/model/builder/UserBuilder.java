@@ -26,6 +26,11 @@ public class UserBuilder {
         return this;
     }
 
+    public UserBuilder setSalt(String salt){
+        user.setSalt(salt);
+        return this;
+    }
+
     public UserBuilder setRoles(List<Role> roles){
         user.setRoles(roles);
         return this;

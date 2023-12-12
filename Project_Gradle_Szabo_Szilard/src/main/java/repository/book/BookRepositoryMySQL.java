@@ -78,33 +78,43 @@ public class BookRepositoryMySQL implements BookRepository {
 
     @Override
     public boolean save(Book book) {
-        String sql = "INSERT INTO book VALUES(null, ?, ?, ?);";
+        String sql = "INSERT INTO book (author, title, publishedDate, quantity) VALUES (?, ?, ?, ?)";
 
-//        String newSql = "INSERT INTO book VALUES(null, \'" + book.getAuthor() +"\', \'"+ book.getTitle()+"\', null );";
+        try {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setString(1, book.getAuthor());
+                preparedStatement.setString(2, book.getTitle());
 
+                // Handle null case for publishedDate
+                if (book.getPublishedDate() != null) {
+                    java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf(book.getPublishedDate().atStartOfDay());
+                    preparedStatement.setTimestamp(3, timestamp);
+                } else {
+                    preparedStatement.setNull(3, Types.TIMESTAMP);
+                }
 
+                preparedStatement.setInt(4, book.getQuantity());
 
-
-
-        try{
-//            Statement statement = connection.createStatement();
-//            statement.executeUpdate(newSql);
-//            return true;
-
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, book.getAuthor());
-            preparedStatement.setString(2, book.getTitle());
-            preparedStatement.setDate(3, java.sql.Date.valueOf(book.getPublishedDate()));
-
-            int rowsInserted = preparedStatement.executeUpdate();
-
-            return (rowsInserted != 1) ? false : true;
-
-        } catch (SQLException e){
+                int rowsInserted = preparedStatement.executeUpdate();
+                return rowsInserted == 1;
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
+    }
 
+    @Override
+    public void deleteBook(Long id) {
+        String sql = "DELETE FROM book WHERE id = ?;";
+
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -119,6 +129,22 @@ public class BookRepositoryMySQL implements BookRepository {
         }
     }
 
+    @Override
+    public void updateBook(Book book) {
+        try {
+            String sql = "UPDATE book SET quantity = ?, author = ?, title = ?, publishedDate = ? where id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, book.getQuantity());
+            preparedStatement.setString(2, book.getAuthor());
+            preparedStatement.setString(3, book.getTitle());
+            preparedStatement.setDate(4, java.sql.Date.valueOf(book.getPublishedDate()));
+            preparedStatement.setLong(5, book.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private Book getBookFromResultSet(ResultSet resultSet) throws SQLException {
         return new BookBuilder()
@@ -126,6 +152,7 @@ public class BookRepositoryMySQL implements BookRepository {
                 .setAuthor(resultSet.getString("author"))
                 .setTitle(resultSet.getString("title"))
                 .setPublishedDate(new java.sql.Date((resultSet.getDate("publishedDate")).getTime()).toLocalDate())
+                .setQuantity(resultSet.getInt("quantity"))
                 .build();
     }
 }

@@ -11,7 +11,9 @@ import repository.user.UserRepositoryMySQL;
 import service.book.BookService;
 import service.book.BookServiceImpl;
 import service.user.AuthenticationService;
-import service.user.AuthenticationServiceMySQL;
+import service.user.AuthenticationServiceImpl;
+import service.user.UserService;
+import service.user.UserServiceImpl;
 import view.LoginView;
 
 import java.sql.Connection;
@@ -21,10 +23,27 @@ public class ComponentFactory {
     private final LoginController loginController;
     private final AuthenticationService authenticationService;
     private final UserRepository userRepository;
+    private final UserService userService;
     private final RightsRolesRepository rightsRolesRepository;
     private final BookRepositoryMySQL bookRepository;
     private final BookService bookService;
     private static volatile ComponentFactory instance;
+
+    public UserRepository getUserRepository() {
+        return userRepository;
+    }
+
+    public RightsRolesRepository getRightsRolesRepository() {
+        return rightsRolesRepository;
+    }
+
+    public BookRepositoryMySQL getBookRepository() {
+        return bookRepository;
+    }
+
+    public static ComponentFactory getInstance() {
+        return instance;
+    }
 
     public static ComponentFactory getInstance(Boolean componentsForTests, Stage stage) {
         if(instance == null) {
@@ -42,9 +61,10 @@ public class ComponentFactory {
         Connection connection = DatabaseConnectionFactory.getConnectionWrapper(componentsForTests).getConnection();
         this.rightsRolesRepository = new RightsRolesRepositoryMySQL(connection);
         this.userRepository = new UserRepositoryMySQL(connection,rightsRolesRepository);
-        this.authenticationService = new AuthenticationServiceMySQL(userRepository,rightsRolesRepository);
+        this.userService= new UserServiceImpl(userRepository);
+        this.authenticationService = new AuthenticationServiceImpl(userRepository,rightsRolesRepository);
         this.loginView = new LoginView(stage);
-        this.loginController = new LoginController(loginView,authenticationService);
+        this.loginController = new LoginController(loginView,this);
         this.bookRepository = new BookRepositoryMySQL(connection);
         this.bookService = new BookServiceImpl(bookRepository);
     }
@@ -53,20 +73,16 @@ public class ComponentFactory {
         return authenticationService;
     }
 
-    public UserRepository getUserRepository() {
-        return userRepository;
-    }
-
-    public RightsRolesRepository getRightsRolesRepository() {
-        return rightsRolesRepository;
-    }
-
     public LoginView getLoginView() {
         return loginView;
     }
 
-    public BookRepositoryMySQL getBookRepository() {
-        return bookRepository;
+    public BookService getBookService() {
+        return bookService;
+    }
+
+    public UserService getUserService() {
+        return  userService;
     }
 
     public LoginController getLoginController() {
